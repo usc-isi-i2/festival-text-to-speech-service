@@ -80,8 +80,9 @@ public class Client
     /**
      * @param text: The text to be synthesized
      * @param format: format of the audio file to be returned. Acceptable paramaters include {wav, nist, snd, riff, aiff, audlab, raw, ascii}
+     * @param voice: Name of the voice to be used. What's available depends on what's been installed. Examples include cmu_us_awb_arctic_clunits (currently the default), nitech_us_awb_arctic_hts, etc. Basically anything that shows up when using a (voice.list) command
     **/   
-    public byte[] StringToWave(String text, String format)
+    public byte[] StringToWave(String text, String format, String voice)
     {
         byte[] buff = null;
         String ack;
@@ -90,7 +91,7 @@ public class Client
         try
         {
             sendLine("(Parameter.set 'Wavefiletype '" + format + ")\n");	//Tells Festival what format to return
-            //sendLine("(voice_cmu_us_awb_arctic_clunits)\n");				//Optional: selects a voice. Otherwise, the default voice is used
+            sendLine("(voice_"+voice+")\n");				//Optional: selects a voice. Otherwise, the default voice is used
             sendLine("(tts_return_to_client)\n");
             sendLine("(tts_textall \"\n" + text + "\" \"fundamental\")\n");
             do
@@ -122,7 +123,15 @@ public class Client
             return null;
         }
         return buff;
-    }    
+    } 
+    
+    public byte[] StringToWave(String text){
+    	return StringToWave(text, "wav", "cmu_us_awb_arctic_clunits");
+    }
+    
+    public byte[] StringToWave(String text, String format){
+    	return StringToWave(text, format, "cmu_us_awb_arctic_clunits");
+    }
     
      // Unnecessary function that can be used to find the audio duration if parsing the header fails..Very inefficient since it asks festival to resynthesize the text (just in a different format)
     public int getLength(String message)

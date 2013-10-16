@@ -76,6 +76,7 @@ make install
 + After installing the voices, be sure to edit the voices.scm file (located in festival>lib) to include the names of whatever voices you've added. This edit should be done in the "(defvar default-voice-priority-list " function, located around line 325.
 + To make a voice the default voice, either edit the voice list voices.scm so that the desired voice is first on the list, or edit the festival.scm file (located in festival>lib) so that "(set! voice_default 'voice_{NAME OF VOICE}')" is added at the end.
 + **NOTE** The Enhanced Arctic CMU voices CANNOT be set as defaults for some reason. Therefore, to make sure festival is able to run, make sure to have an installed and useable voice (the default diphone voices, or even the Nitech voices) at the top of the voice list. Do not edit the festival.scm file to change the default voice.
++ Demos of the CMU and Nitech voices can be found in the Voice_demos folder. The name of the file is the *full* name of the voice, so this is the parameter that should be used in the web service if any voice selections are chosen.
 
 ####Running the Festival server
 + To run the festival server, either export the PATH to point to the bin inside the festival folder (`export PATH={path to main festival folder}/festival/bin:$PATH`), 
@@ -98,8 +99,7 @@ make install
 	- To test Festival client and server, direct your browser to "localhost:{PORT}/festival_service/rest/audiotest/get/hello" which should return a wav file of the word "hello"
 + Details about the source code:
 	- Client.java is the actual Festival client. It communicates with the Festival server using Scheme commands and returns a byte array of the audio file in some uncompressed format (wav, nist, ulaw, etc.). 
-		This class handles customization of server location, voice selection, text mode (not demonstrated...see manual), and file type. 
-		As it is, all options except the file type have been hard-coded into the client class, though of course they can easily be changed to parameters.
+		This class handles customization of server location, voice selection, text mode (not demonstrated...see manual), and file type. Currently, the default settings for audio are WAV format and the cmu_us_awb_arctic_clunits voice. Overloaded functions have been provided to change those parameters. 
 	- Festival_service.java demonstrates how to call the Festival client. The first function, returnSound() gets the desired text from the URL and returns the audio file in raw, binary format. The second function, returnSound2() receives a JSON and returns a JSON as well. 
 		This second function offers an example of how to parse the wav-format header for information about the audio (sampling rate, number of samples). The audio file itself is returned as a base64 string inside the JSON.
 		If any audio conversions are to be done, this should be the class to do either it or call upon the class that does.
