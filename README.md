@@ -20,11 +20,13 @@ Just to note, the byte array returned by Festival is a full audio file, headers 
 + Unix-based environment, preferably Linux (Do **NOT** use Windows with Cygwin)
 + A C++ compiler
 + GNU Make any recent version
+
 ####Deciding which to version to use
 + Default voices for Festival are generally low quality, so additional voices must be added.
 + Among the most popular additional voices for Festival are the Nitech HTS voices and the enhanced CMU Arctic voices
 + Nitech HTS voices only work on version 1.96 of Festival, which has a harder installation process
 + CMU Arctic voices work on both the 1.96 and newest 2.1 versions of Festival
+
 ####Instructions for installing v1.96
 1) Download "festival.tar.gz" and "speech-tools.tar.gz" from the "Festival-1.96-revisions" folder
 
@@ -51,7 +53,7 @@ make install
 2) Go to [http://festvox.org/packed/festival/2.1/] (http://festvox.org/packed/festival/2.1/) and download 
 	festival-2.1-release.tar.gz, festlex_CMU.tar.gz, festlex_OALD.tar.gz, festlex_POSLEX.tar.gz, and speech_tools-2.1-release.tar.gz. 
 	The other archives are optional, and merely offer a set of working voices. If you wish to test the festival installation using the 
-	given test suite, download 	the other all the remaining files as well.
+	given test suite, download 	the other the remaining files as well.
 
 3) Unzip all the archives using a "tar xzf <filename>" command and move the "festival" and "speech-tools" folders into whatever directory you wish Festival to rest in
 
