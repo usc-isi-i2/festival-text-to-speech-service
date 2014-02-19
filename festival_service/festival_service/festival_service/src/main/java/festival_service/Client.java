@@ -1,4 +1,4 @@
-package festival_service.client;
+package festival_service;
    
 /*************************************************************************/
 /*                                                                       */
@@ -40,6 +40,7 @@ package festival_service.client;
 
 
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.io.*;
     
 public class Client
@@ -48,21 +49,14 @@ public class Client
     private DataInputStream dataReader;
     private PrintWriter writer;
         
-        
-    public Client() throws IOException
+    //borrowed from the connect() method in the FreeTTS demo client    
+    public Client() throws IOException, UnknownHostException
     {
-    		connect("localhost",1314);
+    	socket = new Socket("localhost", 1314);
+        dataReader = new DataInputStream(socket.getInputStream());
+        writer = new PrintWriter(socket.getOutputStream(),true);
     }
-        
-        
-    //borrowed from the connect() method in the FreeTTS demo client
-    private void connect(String server, int port) throws IOException
-    {
-            socket = new Socket(server, port);
-            dataReader = new DataInputStream(socket.getInputStream());
-            writer = new PrintWriter(socket.getOutputStream(),true);
-    }
-        
+     
         
     public void disconnect()
     {
@@ -80,7 +74,7 @@ public class Client
     /**
      * @param text: The text to be synthesized
      * @param format: format of the audio file to be returned. Acceptable paramaters include {wav, nist, snd, riff, aiff, audlab, raw, ascii}
-     * @param voice: Name of the voice to be used. What's available depends on what's been installed. Examples include cmu_us_awb_arctic_clunits (currently the default), nitech_us_awb_arctic_hts, etc. Basically anything that shows up when using a (voice.list) command
+     * @param voice: Name of the voice to be used. What's available depends on what's been installed. Examples include cmu_us_awb_arctic_clunits, nitech_us_awb_arctic_hts, etc. Basically anything that shows up when using a (voice.list) command
     **/   
     public byte[] StringToWave(String text, String format, String voice)
     {
@@ -133,7 +127,8 @@ public class Client
     	return StringToWave(text, format, "cmu_us_awb_arctic_clunits");
     }
     
-     // Unnecessary function that can be used to find the audio duration if parsing the header fails..Very inefficient since it asks festival to resynthesize the text (just in a different format)
+     // Relatively Unnecessary function that can be used to find the audio duration if parsing the header fails or if the sole goal is to find the audio duration (regardless of format)
+     // Very inefficient since it asks festival to resynthesize the text (just in a different format)
     public int getLength(String message)
     {
     	byte [] wave = StringToWave(message,"nist");
@@ -141,9 +136,7 @@ public class Client
     		return 0;    	
     	
     	int samples = nist_get_param_int(wave, "sample_count".getBytes(), -1);
-    	System.out.println("nist samples = " + samples);
     	int sample_rate = nist_get_param_int(wave, "sample_rate".getBytes(), -1);
-    	System.out.println("nist rate = " + sample_rate);
     	
     	if (samples == -1 || sample_rate == -1)
     	{
@@ -151,7 +144,7 @@ public class Client
     		return 0;
     	}
     	
-    	int duration = (samples/sample_rate) *1000;
+    	int duration = (int)Math.ceil((double)samples/sample_rate) *1000;
     	return duration;
     }
     
