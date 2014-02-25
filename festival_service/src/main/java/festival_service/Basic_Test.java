@@ -10,8 +10,8 @@ import com.sun.jersey.api.json.JSONWithPadding;
 @Path("/path/*")
 public class Basic_Test {
 	@Path("/sample/")
-	@GET
-	@Produces({"application/x-javascript", "application/json", "application/xml"})
+    @GET
+    @Produces({"application/x-javascript", "application/json", "application/xml"})
 	public Response returnPath(@QueryParam("jsoncallback") String callback){
 		Response response;
 		
@@ -38,27 +38,23 @@ public class Basic_Test {
 	}
 	
 	@Path("/single/")
-	@GET
-	@Produces({"application/x-javascript", "application/json", "application/xml"})
+    @GET
+    @Produces({"application/x-javascript", "application/json", "application/xml"})	
 	public Response returnSimplePath(@QueryParam("jsoncallback") String callback){
+		Response response = null;
+	
 		BufferedReader reader = null;
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("hash.txt");
 		if (inputStream == null){	
 			
-			Response error;
-			error = Response
-					.ok()
-	    			.entity(new JSONWithPadding(
-	    				//"{'hash':'h-3690378823082678040','excecution_time': 1300,'source':	{label: 'Orsay Dickens', uri: 'http://dbpedia.org/resource/Orsay_Tennyson_Dickens'}, 'destination':	{label: 'Charles Dickens', uri: 'http://dbpedia.org/resource/Charles_Dickens'},	'path':[" +
-	    				//"{'type':'node','uri':'http://dbpedia.org/resource/Orsay_Tennyson_Dickens', audio_text: 'More blah blah filler text for Orsay Dickens'},"+
-	    				//"{'type':'link', 'inverse':true, 'uri':'http://dbpedia.org/ontology/child'},"+
-	    				//"{'type':'node','uri':'http://dbpedia.org/resource/Charles_Dickens', }"+
-	    				//"]}"
-	    					"path = ?" 
-	    					,callback))
-	    			.build();
-			
-			return error;
+			response = Response
+                    .ok()
+					.status(201)
+                    .type("text/plain")
+                    .entity("Failed to load path")
+                    .build();
+					
+			return response;
 		}
 		
 		reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -82,17 +78,10 @@ public class Basic_Test {
 			//
 		}
 		
-		Response response;
 		response = Response
 	    			.ok()
-	    			.entity(new JSONWithPadding(
-	    				//"{'hash':'h-3690378823082678040','excecution_time': 1300,'source':	{label: 'Orsay Dickens', uri: 'http://dbpedia.org/resource/Orsay_Tennyson_Dickens'}, 'destination':	{label: 'Charles Dickens', uri: 'http://dbpedia.org/resource/Charles_Dickens'},	'path':[" +
-	    				//"{'type':'node','uri':'http://dbpedia.org/resource/Orsay_Tennyson_Dickens', audio_text: 'More blah blah filler text for Orsay Dickens'},"+
-	    				//"{'type':'link', 'inverse':true, 'uri':'http://dbpedia.org/ontology/child'},"+
-	    				//"{'type':'node','uri':'http://dbpedia.org/resource/Charles_Dickens', }"+
-	    				//"]}"
-	    					s
-	    					,callback))
+					.status(200)
+	    			.entity(new JSONWithPadding(s,callback))
 	    			.build();
 	        
 	        return response;
