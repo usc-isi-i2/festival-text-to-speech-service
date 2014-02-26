@@ -115,7 +115,16 @@ public class Festival_service
         Response response;
         int duration=0;
         
-        try
+        if (message.trim().isEmpty()){
+        	response = Response
+        			.status(201)
+                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 404, \"err_text\":\"Message of length 0\"}",callback))
+                    .build();
+        	return response;
+        }
+		
+		
+		try
         {
         	client = new Client();
         }
@@ -125,7 +134,7 @@ public class Festival_service
         	
         	response = Response
         			.status(201)
-                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Festival connection fail\"}"))
+                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Festival connection fail\"}",callback))
                     .build();
         	return response;
         }
@@ -141,7 +150,7 @@ public class Festival_service
             	
             	response = Response
             			.status(201)
-                        .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}"))
+                        .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}",callback))
                         .build();
             }
             else
@@ -163,7 +172,7 @@ public class Festival_service
         {
         	response = Response
            			.status(201)
-                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}"))
+                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}",callback))
                     .build();
        	}
         else{      
@@ -214,7 +223,7 @@ public class Festival_service
         	
         	response = Response
         			.status(201)
-                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Festival connection fail\"}"))
+                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Festival connection fail\"}",callback))
                     .build();
         	return response;
         }   
@@ -227,7 +236,7 @@ public class Festival_service
         {
         	response = Response
            			.status(201)
-                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}"))
+                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}",callback))
                     .build();
        	}
         	
