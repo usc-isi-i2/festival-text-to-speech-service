@@ -56,6 +56,13 @@ public class Client
         dataReader = new DataInputStream(socket.getInputStream());
         writer = new PrintWriter(socket.getOutputStream(),true);
     }
+    
+    public Client(int port) throws IOException, UnknownHostException
+    {
+    	socket = new Socket("localhost", port);
+        dataReader = new DataInputStream(socket.getInputStream());
+        writer = new PrintWriter(socket.getOutputStream(),true);
+    }
      
         
     public void disconnect()
