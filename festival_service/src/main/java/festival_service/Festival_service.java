@@ -109,7 +109,7 @@ public class Festival_service
     @Path("/jsonfull/")
     @GET
     @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnbasic(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod)
+    public Response returnbasic(@QueryParam("req_text") String message, @QueryParam("callback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice)
     {       
         Client client;
         Response response;
@@ -122,11 +122,18 @@ public class Festival_service
                     .build();
         	return response;
         }
+        
+        int port=1314;
+        
+        if (voice!=null){
+			if(voice.contains("nitech"))
+				port=1315;
+		}
 		
 		
 		try
         {
-        	client = new Client();
+        	client = new Client(port);
         }
         catch (IOException ioe)
         {
@@ -165,7 +172,12 @@ public class Festival_service
         }
  
         byte[] wave = null;
-        wave = client.StringToWave(message,"wav");
+        
+		if (voice==null)
+			wave = client.StringToWave(message,"wav");
+		else
+			wave = client.StringToWave(message,"wav",voice);
+			
         client.disconnect();
         	
         if (wave == null)
@@ -207,7 +219,7 @@ public class Festival_service
     @Path("/jsonbase/")
     @GET
     @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnbasic2(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod)
+    public Response returnbasic2(@QueryParam("req_text") String message, @QueryParam("callback") String callback, @QueryParam("url_type") int URLmethod)
     {       
         Client client;
         Response response;
@@ -265,9 +277,16 @@ public class Festival_service
         Client client;
         Response response;
         
+        int port=1314;
+        
+        if (voice!=null){
+			if(voice.contains("nitech"))
+				port=1315;
+		}
+        
         try
         {
-        	client = new Client();
+        	client = new Client(port);
         }
         catch (IOException ioe)
         {
@@ -282,7 +301,11 @@ public class Festival_service
             return response;       
         }
         
-        wave = client.StringToWave(message,"wav",voice);
+		if (voice==null)
+			wave = client.StringToWave(message,"wav");
+		else
+			wave = client.StringToWave(message,"wav",voice);
+			
         client.disconnect();
            
         if (wave==null)
