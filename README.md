@@ -90,15 +90,13 @@ make install
 + The Festival manual is located at [http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html] (http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html). Reference it for more details and client/server API.
 
 ###Creating the web service
-+ An example web service is included in the "festival_service" folder and uses the Jersey framework. To run this example web service using Eclipse:
-	- Make a new Dynamic Web Project, and call it "festival_service." Make sure to check the box that says "Generate web.xml deployment descriptor"
-	![alt text] (festival_service/Project-creation.png "")
-	- Replace the "WEB-INF" folder under "WebContent" with the one from the example.
-	- Create a festival_service.client package and add the Client.java file to it
-	- Create a festival_service.rest package and add the Festival_service.java file to it.
-	- Set up the server and add the project to it.
-	- Run
-	- To test Festival client and server, direct your browser to "localhost:{PORT}/festival_service/rest/audiotest/get/hello" which should return a wav file of the word "hello"
++ An example web service is included in the "festival_service" folder and uses the Jersey framework. It can be compiled using Maven:
+```
+mvn clean install
+```
+
+This will generate a .war file. If you don't wish to change the code, then using the provided .war file is fine.
+
 + Details about the source code:
 	- Client.java is the actual Festival client. It communicates with the Festival server using Scheme commands and returns a byte array of the audio file in some uncompressed format (wav, nist, ulaw, etc.). 
 		This class handles customization of server location, voice selection, text mode (not demonstrated...see manual), and file type. Currently, the default settings for audio are WAV format and the cmu_us_awb_arctic_clunits voice. Overloaded functions have been provided to change those parameters. 
