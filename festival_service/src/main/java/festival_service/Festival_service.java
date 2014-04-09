@@ -109,7 +109,7 @@ public class Festival_service
     @Path("/jsonfull/")
     @GET
     @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnbasic(@QueryParam("req_text") String message, @QueryParam("callback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice)
+    public Response returnbasic(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice)
     {       
         Client client;
         Response response;
@@ -219,7 +219,7 @@ public class Festival_service
     @Path("/jsonbase/")
     @GET
     @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnbasic2(@QueryParam("req_text") String message, @QueryParam("callback") String callback, @QueryParam("url_type") int URLmethod)
+    public Response returnbasic2(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod)
     {       
         Client client;
         Response response;
