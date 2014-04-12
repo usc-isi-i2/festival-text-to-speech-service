@@ -123,11 +123,11 @@ public class Festival_service
         	return response;
         }
         
-        int port=1314;
+        int port=1315;
         
         if (voice!=null){
-			if(voice.contains("nitech"))
-				port=1315;
+			if(voice.contains("cmu"))
+				port=1314;
 		}
 		
 		
@@ -276,13 +276,11 @@ public class Festival_service
         
         Client client;
         Response response;
+                
+        int port=1315;
         
-        int port=1314;
-        
-        if (voice!=null){
-			if(voice.contains("nitech"))
-				port=1315;
-		}
+		if(voice.contains("cmu"))
+			port=1314;
         
         try
         {
