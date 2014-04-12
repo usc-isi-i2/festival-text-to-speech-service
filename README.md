@@ -13,7 +13,7 @@ This sample web service calls upon a Festival server to do synthesize text into 
 
 The Festival TTS server returns all audio as some form of uncompressed format such as WAV. In order for the web service to return smaller audio formats such as MP3, 
 edits would have to be made to the web service so that it converts the byte array into the desired format. This might be done using libraries such as LAME, Tritonus, or possibly even the built-in Java Sound API.
-Just to note, the byte array returned by Festival is a full audio file, headers included, so keep that in mind, if you wish to conver formats.
+Just to note, the byte array returned by Festival is a full audio file, headers included. Keep this in mind if you wish to conver formats.
 
 ###Installation Instructions for Festival
 ####Requirements
@@ -48,7 +48,7 @@ make install
 ```
 
 ####Instructions for installing v2.1
-1) Easiest method is to run "sudo apt-get install festival" to get the Debian version of festival. Otherwise, continue reading for how to install festival from source
+1) If on Ubuntu, the easiest method is to run "sudo apt-get install festival" to get the Debian version of festival. Otherwise, continue reading for how to install festival from source
 
 2) Go to [http://festvox.org/packed/festival/2.1/] (http://festvox.org/packed/festival/2.1/) and download 
 	festival-2.1-release.tar.gz, festlex_CMU.tar.gz, festlex_OALD.tar.gz, festlex_POSLEX.tar.gz, and speech_tools-2.1-release.tar.gz. 
