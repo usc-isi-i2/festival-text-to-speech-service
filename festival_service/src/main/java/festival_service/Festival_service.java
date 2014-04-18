@@ -71,7 +71,7 @@ public class Festival_service
         
         try
         {
-        	client = new Client();
+        	client = new Client(1315);
         }
         catch (IOException ioe)
         {
@@ -126,7 +126,7 @@ public class Festival_service
         int port=1315;
         
         if (voice!=null){
-			if(voice.contains("cmu"))
+			if(!voice.contains("nitech"))
 				port=1314;
 		}
 		
@@ -279,7 +279,7 @@ public class Festival_service
                 
         int port=1315;
         
-		if(voice.contains("cmu"))
+		if(!voice.contains("nitech"))
 			port=1314;
         
         try
