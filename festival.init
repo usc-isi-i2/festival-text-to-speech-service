@@ -13,9 +13,8 @@ RETVAL=0
 prog="festival"
 LOCKFILE=/var/lock/subsys/$prog
 
-DAEMON=/home/linda/festival2.1/festival/bin/festival
-REALPROC=/home/linda/festival2.1/festival/bin/festival
-SCM=/home/linda/festival2.1/festival/lib/festival.scm
+DAEMON=/opt/isd/festival2.1/festival/bin/festival
+SCM=/opt/isd/festival2.1/festival/lib/festival.scm
 NAME=festival2.1
 
 start() {
