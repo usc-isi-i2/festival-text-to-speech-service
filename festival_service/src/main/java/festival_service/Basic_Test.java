@@ -63,7 +63,7 @@ public class Basic_Test {
 		int counter = 0;
 		int num;
 		Random random = new Random();
-		num = random.nextInt(4);
+		num = random.nextInt(26);
 		System.out.println(num);
 		String s = null;
 		try{

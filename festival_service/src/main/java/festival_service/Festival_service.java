@@ -71,7 +71,7 @@ public class Festival_service
         
         try
         {
-        	client = new Client(1315);
+        	client = new Client(1314);
         }
         catch (IOException ioe)
         {
@@ -123,11 +123,11 @@ public class Festival_service
         	return response;
         }
         
-        int port=1315;
+        int port=1314;
         
         if (voice!=null){
-			if(!voice.contains("nitech"))
-				port=1314;
+			if(voice.contains("nitech"))
+				port=1315;
 		}
 		
 		
@@ -277,10 +277,10 @@ public class Festival_service
         Client client;
         Response response;
                 
-        int port=1315;
+        int port=1314;
         
-		if(!voice.contains("nitech"))
-			port=1314;
+		if(voice.contains("nitech"))
+			port=1315;
         
         try
         {
