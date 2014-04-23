@@ -21,9 +21,6 @@ NAME=festival2.1
 start() {
         echo -n "Starting festival: "
         daemon $DAEMON --server -b $SCM
-		
-		start-stop-daemon --start --chuid festival --background \
-		      --exec $DAEMON -- --server -b $SCM
         [ $RETVAL -eq 0 ] && touch $LOCKFILE
         echo
         return $RETVAL
@@ -31,7 +28,6 @@ start() {
 
 stop() {
         echo -n "Shutting down festival: "
-        start-stop-daemon --stop --oknodo --exec $REALPROC
 		killproc $prog -TERM
 		RETVAL=$?
 		[ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/$prog
