@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#/etc/rc.d/init.d/festival2.1
+#/etc/rc.d/init.d/festival
 #
 # chkconfig: 2345 70 30
 # description: Festival is a text-to-speech service
