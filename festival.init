@@ -20,7 +20,7 @@ NAME=festival2.1
 
 start() {
         echo -n "Starting festival: "
-        daemon $DAEMON --server -b $SCM
+        daemon $DAEMON --server -b $SCM &
         [ $RETVAL -eq 0 ] && touch $LOCKFILE
         echo
         return $RETVAL
