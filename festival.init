@@ -1,80 +1,58 @@
-#!/bin/sh
-#/etc/init.d/festival
+#!/bin/bash
 #
-# Init script for starting Festival as a system-wide server process.
+#/etc/rc.d/init.d/festival2.1
 #
-# Written by David Huggins-Daines <dhd@cepstral.com>
-# LSBINITInfo by Kartik Mistry <kartik.mistry@gmail.com>
-# LSB logging functions by David Härdeman <david@hardeman.nu>
+# chkconfig: 2345 70 30
+# description: Festival is a text-to-speech service
+# processname: festival
 
-### BEGIN INIT INFO
-# Provides:          festival
-# Required-Start:    $syslog
-# Required-Stop:     $syslog
-# Should-Start:      $local_fs
-# Should-Stop:       $local_fs
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Starts Festival engine at boot time
-# Description:       Init script for starting Festival TTS as a
-#                    system-wide server process
-### END INIT INFO
+# Source function library.
+. /etc/init.d/functions
 
-# WARNING: It is inherently insecure to run a festival instance as a
-# server, mainly because it exposes the whole system to exploits which
-# can be easily used by attackers to gain access to your
-# computer. This is because of the inherent design of the festival
-# server. Please use it only in a situation where you are sure that
-# you will not be subjected to such an attack, or have adequate
-# security precautions.
+RETVAL=0
+prog="festival"
+LOCKFILE=/var/lock/subsys/$prog
 
-# This file has been provided as an example file for your use, should
-# you wish to run festival as a server.
+DAEMON=/home/linda/festival2.1/festival/bin/festival
+REALPROC=/home/linda/festival2.1/festival/bin/festival
+SCM=/home/linda/festival2.1/festival/lib/festival.scm
+NAME=festival2.1
 
-[ -r /etc/default/festival ] && . /etc/default/festival
-if [ "$RUN_FESTIVAL" != yes ]; then
-	echo Not starting festival server, as /etc/default/festival does not have RUN_FESTIVAL=yes.
-	exit 0
-fi
+start() {
+        echo -n "Starting festival: "
+        daemon $DAEMON --server -b $SCM
+		
+		start-stop-daemon --start --chuid festival --background \
+		      --exec $DAEMON -- --server -b $SCM
+        [ $RETVAL -eq 0 ] && touch $LOCKFILE
+        echo
+        return $RETVAL
+}
 
-# NOTE: Not just anybody can connect to your server; the list of allowed
-# hostnames is a regexp. Check /usr/share/festival/festival.scm for more
-# helpful comments; add your settings to /etc/festival.scm.
-
-set -e
-
-DAEMON=/home/linda/festival1.96/festival/bin/festival
-REALPROC=/home/linda/festival1.96/festival/bin/festival
-SCM=/home/linda/festival1.96/festival/lib/festival.scm
-NAME=festival
-
-. /lib/lsb/init-functions
-
-test -x $DAEMON || exit 0
+stop() {
+        echo -n "Shutting down festival: "
+        start-stop-daemon --stop --oknodo --exec $REALPROC
+		killproc $prog -TERM
+		RETVAL=$?
+		[ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/$prog
+		echo
+		return $RETVAL
+}
 
 case "$1" in
-  start)
-    log_daemon_msg "Starting Festival server" "$NAME"
-    start-stop-daemon --start --chuid festival --background \
-		      --exec $DAEMON -- --server -b $SCM
-    log_end_msg 0
-    ;;
-  stop)
-    log_daemon_msg "Stopping Festival server" "$NAME"
-    start-stop-daemon --stop --oknodo --exec $REALPROC
-    log_end_msg 0
-    ;;
-  restart|reload|force-reload)
-    log_daemon_msg "Restarting Festival server" "$NAME"
-    start-stop-daemon --stop --oknodo --exec $REALPROC
-    start-stop-daemon --start --chuid festival --background \
-		      --exec $DAEMON -- --server -b $SCM
-    log_end_msg 0
-    ;;
-  *)
-    echo "Usage: /etc/init.d/$NAME {start|stop|restart}" >&2
-    exit 2
-    ;;
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: festival {start|stop|status|reload|restart[|probe]"
+        exit 1
+        ;;
 esac
-
-exit 0
+exit $RETVAL
