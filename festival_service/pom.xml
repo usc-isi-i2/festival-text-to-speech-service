@@ -28,6 +28,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<repositories>
+		<!--other repositories if any-->
+		<repository>
+			<id>project.local</id>
+			<name>project</name>
+			<url>file:${project.basedir}/repo</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<!-- These are the Jersey dependencies -->
@@ -40,6 +49,11 @@
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
 			<version>1.9.1</version>
-</dependency>
+		</dependency>
+		<dependency>
+			<groupId>com.sauron</groupId>
+			<artifactId>jave</artifactId>
+			<version>1.0.2</version>
+		</dependency>
   </dependencies>
 </project>

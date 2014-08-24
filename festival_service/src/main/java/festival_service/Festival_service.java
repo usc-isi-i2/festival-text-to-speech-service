@@ -5,6 +5,7 @@ import javax.ws.rs.core.*;
 
 import com.sun.jersey.api.json.JSONWithPadding;
 import com.sun.jersey.core.util.Base64;
+import it.sauronsoftware.jave.*;
 //import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 
@@ -13,61 +14,17 @@ import java.nio.ByteBuffer;
  
 @Path("/audiotest/*")
 public class Festival_service
-{
-    @Path("/post")
-	@POST
-	@Consumes("text/plain")
-    @Produces({"audio/wav", "text/plain"})
-    public Response returnSound(String message)
-    {
-        byte [] wave = null;
-        
-        Client client;
-        Response response;
-        
-        try
-        {
-        	client = new Client();
-        }
-        catch (IOException ioe)
-        {
-        	response = Response
-                    .ok()
-                    .type("text/plain")
-                    .entity("Failed to connect to server")
-                    .build();
-            return response;       
-        }
-        
-        wave = client.StringToWave(message,"wav");
-        client.disconnect();
-           
-        if (wave==null)
-        {
-        	response = Response
-                    .ok()
-                    .type("text/plain")
-                    .entity("Failed to connect to server")
-                    .build();
-        }
-        
-        response = Response
-                .ok()
-                .type("audio/wav")
-                .entity(wave)
-                .build();
-        return response;       
-    }
-    
+{    
     @Path("/get/{Message}")
     @GET
-    @Produces("audio/wav")
-    public Response returnSound2(@PathParam("Message") String message)
+    @Produces("audio/mpeg")
+    public Response returnSound(@PathParam("Message") String message)
     {
-        byte [] wave = null;
+    	
+    	byte [] wave = null;
         
         Client client;
-        Response response;
+        Response response;        
         
         try
         {
@@ -98,10 +55,20 @@ public class Festival_service
                     .build();
         }
         
+        byte[] mp3 = convertToMp3(wave);
+        if (mp3==null)
+        {
+        	response = Response
+        			.status(201)
+                    .type("text/plain")
+                    .entity("Encoding failed")
+                    .build();
+        }
+        
         response = Response
                 .ok()
-                .type("audio/wav")
-                .entity(wave)
+                .type("audio/mpeg")
+                .entity(mp3)
                 .build();
         return response;       
     }
@@ -109,7 +76,7 @@ public class Festival_service
     @Path("/jsonfull/")
     @GET
     @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnbasic(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice)
+    public Response returnFull(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice)
     {       
         Client client;
         Response response;
@@ -187,7 +154,8 @@ public class Festival_service
                     .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}",callback))
                     .build();
        	}
-        else{      
+        else{  
+        	//Calculate the duration...this doesn't change even after encoding
 	        byte[] temp = new byte[4];
 	        temp[0] = wave[31];
 	        temp[1] = wave[30];
@@ -199,13 +167,24 @@ public class Festival_service
 	        int samples = wave.length - 44;        
 	        duration = (samples/rate)*1000;
 	        
+	        //Convert to mp3
+	        byte[] mp3 = convertToMp3(wave);
+	        
+	        if (mp3==null)
+	        {
+	        	response = Response
+	        			.status(201)
+	                    .type("text/plain")
+	                    .entity("Encoding failed")
+	                    .build();
+	        }
 	        
 	        //convert to base 64 for safety?
-	        String s = new String(Base64.encode(wave));
+	        String s = new String(Base64.encode(mp3));
 	        String snd_url="";
 	        
 	        if (URLmethod == 3)
-	        	snd_url="data:audio/wav;base64,";
+	        	snd_url="data:audio/mpeg;base64,";
 	        
 	        response = Response
 	    			.ok()
@@ -216,60 +195,9 @@ public class Festival_service
         return response;
     }
     
-    @Path("/jsonbase/")
-    @GET
-    @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnbasic2(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod)
-    {       
-        Client client;
-        Response response;
-        
-        try
-        {
-        	client = new Client();
-        }
-        catch (IOException ioe)
-        {
-        	System.out.print("Failed to connect to festival server");
-        	ioe.printStackTrace();
-        	
-        	response = Response
-        			.status(201)
-                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Festival connection fail\"}",callback))
-                    .build();
-        	return response;
-        }   
-           
-        byte[] wave = null;
-        wave = client.StringToWave(message,"wav","cmu_us_awb_arctic_clunits");
-        client.disconnect();
-        	
-        if (wave == null)
-        {
-        	response = Response
-           			.status(201)
-                    .entity(new JSONWithPadding("{\"res\":\"ER\", \"err_code\": 201, \"err_text\":\"Speech synthesis fail\"}",callback))
-                    .build();
-       	}
-        	
-		//convert to base 64 for safety?
-        String s = new String(Base64.encode(wave));
-        String snd_url="";
-        
-        if (URLmethod == 3)
-        	snd_url="data:audio/wav;base64,";
-        
-        response = Response
-    			.ok()
-    			.entity(new JSONWithPadding("{\"res\":\"OK\", \"snd_url\":\"" + snd_url + "\", \"text\":\""+s+"\"}",callback))
-    			.build();
-        
-        return response;
-    }
-    
     @Path("/getDemo/{Message}/{Voice}")
     @GET
-    @Produces("audio/wav")
+    @Produces("audio/mpeg")
     public Response returnDemo(@PathParam("Message") String message, @PathParam("Voice") String voice)
     {
         byte [] wave = null;
@@ -299,7 +227,7 @@ public class Festival_service
             return response;       
         }
         
-		if (voice==null)
+		if (voice.isEmpty())
 			wave = client.StringToWave(message,"wav");
 		else
 			wave = client.StringToWave(message,"wav",voice);
@@ -315,12 +243,97 @@ public class Festival_service
                     .build();
         }
         
+        byte[] mp3 = convertToMp3(wave);
+        if (mp3==null)
+        {
+        	response = Response
+        			.status(201)
+                    .type("text/plain")
+                    .entity("Encoding failed")
+                    .build();
+        }
+        
         response = Response
                 .ok()
-                .type("audio/wav")
-                .entity(wave)
+                .type("audio/mpeg")
+                .entity(mp3)
                 .build();
-        return response;       
+        return response;          
     }
     
+    private byte[] convertToMp3(byte[] wave){
+    	File tempwav = null, tempmp3 = null;
+    	
+    	//Create temporary files for the encoder class
+    	try{
+        	tempwav = File.createTempFile("wav", ".wav");
+        	tempmp3 = File.createTempFile("mp3", ".mp3");
+        	BufferedOutputStream bs = new BufferedOutputStream(new FileOutputStream(tempwav));
+        	bs.write(wave);
+            
+        }catch(IOException e){
+        	 
+        	System.out.print("Failed to create file");
+        	e.printStackTrace();
+        	
+        	if (tempwav!=null)
+        		tempwav.delete();
+        	
+        	if (tempmp3!=null)
+        		tempmp3.delete();
+        	
+        	return null;      
+
+        }
+        
+    	//Encode: taken straight from the documentation examples
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(new Integer(128000));
+        audio.setChannels(new Integer(2));
+        audio.setSamplingRate(new Integer(44100));
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+        Encoder encoder = new Encoder();
+
+		try {
+			encoder.encode(tempwav, tempmp3, attrs);
+		} catch (IllegalArgumentException | EncoderException e) {
+			System.out.print("Failed to encode mp3 file");
+        	e.printStackTrace();
+        	
+        	tempwav.delete();
+    		tempmp3.delete();
+        	return null;      
+		}
+
+		//Convert from file to a byte array
+		FileInputStream fis;
+		ByteArrayOutputStream bos;
+		byte [] mp3;
+		try {
+			fis = new FileInputStream(tempmp3);
+			bos = new ByteArrayOutputStream();
+			//Assuming the mp3 byte array is smaller than the original wav...that was kind of the point of encoding
+			mp3 = new byte[wave.length];
+			
+			//Writes len bytes from the specified byte array starting at offset off to this byte array output stream.
+			for (int readNum; (readNum = fis.read(mp3)) != -1;) {
+                bos.write(mp3, 0, readNum); //no doubt here is 0
+                
+            }
+		} catch (IOException ex) {
+			tempwav.delete();
+			tempmp3.delete();
+			return null;    
+		} 
+        
+		tempwav.delete();
+		tempmp3.delete();		
+        return mp3;     
+    }    
 }
+
+
+
