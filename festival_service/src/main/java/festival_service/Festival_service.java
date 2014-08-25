@@ -315,14 +315,12 @@ public class Festival_service
 		try {
 			fis = new FileInputStream(tempmp3);
 			bos = new ByteArrayOutputStream();
-			//Assuming the mp3 byte array is smaller than the original wav...that was kind of the point of encoding
-			mp3 = new byte[wave.length];
 			
 			//Writes len bytes from the specified byte array starting at offset off to this byte array output stream.
-			for (int readNum; (readNum = fis.read(mp3)) != -1;) {
-                bos.write(mp3, 0, readNum); //no doubt here is 0
-                
+			for (int readNum; (readNum = fis.read(wave)) != -1;) {
+                bos.write(wave, 0, readNum); //no doubt here is 0
             }
+			mp3 = bos.toByteArray();
 		} catch (IOException ex) {
 			tempwav.delete();
 			tempmp3.delete();
