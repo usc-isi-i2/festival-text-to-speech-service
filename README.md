@@ -11,9 +11,7 @@ This sample web service calls upon a Festival server to do synthesize text into 
 
 4) Web service handles the byte array audio and returns it to the browser
 
-The Festival TTS server returns all audio as some form of uncompressed format such as WAV. In order for the web service to return smaller audio formats such as MP3, 
-edits would have to be made to the web service so that it converts the byte array into the desired format. This might be done using libraries such as LAME, Tritonus, or possibly even the built-in Java Sound API.
-Just to note, the byte array returned by Festival is a full audio file, headers included. Keep this in mind if you wish to conver formats.
+The Festival TTS server returns all audio as some form of uncompressed format such as WAV. The web service provided in this repository uses the [JAVE] (http://www.sauronsoftware.it/projects/jave/) library to convert into MP3.
 
 ###Installation Instructions for Festival
 ####Requirements
