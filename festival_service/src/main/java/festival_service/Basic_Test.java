@@ -63,8 +63,7 @@ public class Basic_Test {
 		int counter = 0;
 		int num;
 		Random random = new Random();
-		num = random.nextInt(26);
-		System.out.println(num);
+		num = random.nextInt(216);
 		String s = null;
 		try{
 		while (counter<num){
@@ -86,5 +85,6 @@ public class Basic_Test {
 	        
 	        return response;
 	}
+    //reader.close();
 
 }
