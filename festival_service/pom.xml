@@ -28,15 +28,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
-	<repositories>
-		<!--other repositories if any-->
-		<repository>
-			<id>project.local</id>
-			<name>project</name>
-			<url>file:${project.basedir}/repo</url>
-		</repository>
-	</repositories>
+
 
 	<dependencies>
 		<!-- These are the Jersey dependencies -->
@@ -54,6 +46,8 @@
 			<groupId>com.sauron</groupId>
 			<artifactId>jave</artifactId>
 			<version>1.0.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jave-1.0.2.jar</systemPath>
 		</dependency>
   </dependencies>
 </project>
