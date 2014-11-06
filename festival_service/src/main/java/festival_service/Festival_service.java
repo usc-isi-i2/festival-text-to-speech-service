@@ -76,7 +76,7 @@ public class Festival_service
     @Path("/jsonfull/")
     @GET
     @Produces({"application/x-javascript", "application/json", "application/xml"})
-    public Response returnFull(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice)
+    public Response returnFull(@QueryParam("req_text") String message, @QueryParam("jsoncallback") String callback, @QueryParam("url_type") int URLmethod, @QueryParam("voice_name") String voice, @QueryParam("id") int attemptId)
     {       
         Client client;
         Response response;
@@ -131,7 +131,7 @@ public class Festival_service
             {
             	response = Response
         			.ok()
-        			.entity(new JSONWithPadding("{\"res\":\"OK\", \"snd_url\":\"http://localhost:7001/festival_service/rest/audiotest/get/\", \"snd_time\":"+duration+",\"text\":\""+message+"\"}",callback))
+        			.entity(new JSONWithPadding("{\"res\":\"OK\", \"id\": "+attemptId+", \"snd_url\":\"http://localhost:7001/festival_service/rest/audiotest/get/\", \"snd_time\":"+duration+",\"text\":\""+message+"\"}",callback))
         			.build();
             }
             
@@ -188,7 +188,7 @@ public class Festival_service
 	        
 	        response = Response
 	    			.ok()
-	    			.entity(new JSONWithPadding("{\"res\":\"OK\", \"snd_url\":\"" + snd_url + "\", \"snd_time\":"+duration+",\"text\":\""+s+"\"}",callback))
+	    			.entity(new JSONWithPadding("{\"res\":\"OK\", \"id\": "+attemptId+", \"snd_url\":\"" + snd_url + "\", \"snd_time\":"+duration+",\"text\":\""+s+"\"}",callback))
 	    			.build();
         }
         
