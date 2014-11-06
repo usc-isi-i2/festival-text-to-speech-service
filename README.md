@@ -94,7 +94,11 @@ make install
 + The Festival manual is located at [http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html] (http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html). Reference it for more details and client/server API.
 
 ###Creating the web service (using Maven)
-+ An example web service is included in the "festival_service" folder using the Jersey framework. The project can be compiled using:
++ An example web service is included in the "festival_service" folder using the Jersey framework. Before compiling with Maven, the custom JAVE library must be added. The jar file is located in the lib/ folder. From the project base directory, execute
+```
+mvn deploy:deploy-file -Durl=file:repo/ -Dfile=jave-1.0.2.jar -DgroupId=lib/com.sauron -DartifactId=jave -Dpackaging=jar -Dversion=1.0.2
+```
+After this, the project can be compiled normally:
 ```
 mvn clean install
 ```
