@@ -94,19 +94,18 @@ make install
 + The Festival manual is located at [http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html] (http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html). Reference it for more details and client/server API.
 
 ###Creating the web service (using Maven)
-+ An example web service is included in the "festival_service" folder using the Jersey framework. Before compiling with Maven, the custom JAVE library must be added. The jar file is located in the lib/ folder. From the project base directory, execute
++ An example web service is included in the "festival_service" folder using the Jersey framework. The service has dependencies on the JAVE library as well as the Jersey framework. A local repository has already been included (repo/) with JAVE installed in it. 
+Jersey can normally be downloaded from the main maven repository, though Maven 2.2.1 fails to follow the 301 redirect requests, leading to build errors. This can be bypassed by either downgrading to 2.2.0 or upgrading to 3.x.
+Alternatively, one can try to manually install the jar files (located inside the lib/ folder) using commands of the following format:
 ```
-mvn deploy:deploy-file -Durl=file:repo/ -Dfile=jave-1.0.2.jar -DgroupId=lib/com.sauron -DartifactId=jave -Dpackaging=jar -Dversion=1.0.2
+mvn deploy:deploy-file -Durl=file:repo/ -Dfile=lib/{name-of-jar-file} -DgroupId={groupId} -DartifactId={artifactId} -Dpackaging=jar -Dversion={version #}
 ```
-After this, the project can be compiled normally:
+Once all dependencies are taken care of, the project can be compiled using
 ```
 mvn clean install
 ```
 
 This will generate a .war file. If you don't wish to change the code, then using the provided .war file is fine.
-
-Note: Some of the required Jersey repositories have moved, leaving 301 redirect requests. Maven 2.2.1 fails to follow these requests, leading to build errors. This can be bypassed by either downgrading to 2.2.0 or upgrading to 3.x.
-
 
 + Details about the source code:
 	- Client.java is the actual Festival client. It communicates with the Festival server using Scheme commands and returns a byte array of the audio file in some uncompressed format (wav, nist, ulaw, etc.). 
