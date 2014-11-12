@@ -85,10 +85,11 @@ make install
 
 ####Running the Festival server
 + To run the festival server, either export the PATH to point to the bin inside the festival folder (`export PATH={path to main festival folder}/festival/bin:$PATH`), 
-	or manually type out the path and do a `festival --server` from the command line. Of course, include the "./" prefix if done without exporting the PATH.
+	or manually type out the path and do a `festival --server` from the command line. Of course, include the "./" prefix if done without exporting the PATH. 
 + By default, Festival runs on port 1314. To change the port at runtime, add "'(set! server_port PORT)'" to the command, where PORT is the desired port number. Ex: `festival --server '(set! server_port 1515)'`
 + To edit any defaults, including the port numbers, number of concurrent clients, security settings, etc...Edit the festival.scm file (located at festival>lib). Information about the server settings begins at around line 408.
-+ An init script can be used to force the server to start automatically. An example script for CentOS has been provided. Ubuntu users may refer to [https://github.com/zeehio/festival-debian/blob/master/debian/festival.init] (https://github.com/zeehio/festival-debian/blob/master/debian/festival.init).
++ An init script can be used to run festival as a service and enable automatic startup. An example script for CentOS has been provided. Ubuntu users may refer to [https://github.com/zeehio/festival-debian/blob/master/debian/festival.init] (https://github.com/zeehio/festival-debian/blob/master/debian/festival.init).
++ To change the default word parsing rules (such as forcing festival to pronounce & as "and", for example), one can edit the token.scm file (located at festival>lib). The one updloaded here has 2 added rules: add silent vowels to 3+ letter words so that festival will attempt to pronouce them as opposed to spelling them out, and to replace & with "and".
 
 ####Additional information
 + The Festival manual is located at [http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html] (http://www.cstr.ed.ac.uk/projects/festival/manual/festival_toc.html). Reference it for more details and client/server API.
