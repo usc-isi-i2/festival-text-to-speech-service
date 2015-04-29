@@ -25,7 +25,7 @@ The Festival TTS server returns all audio as some form of uncompressed format su
 + Ubuntu users use `sudo apt-get install libncurses5-dev`
 
 ####Deciding which to version to use
-+ The newest version of Festival has been released. I recommend using this and the voices included with this distribution. Instructions and recommendations for older releases have been left at the bottom of the README for reference, since older voices do not work with the new distribution's engines.
++ As of December 2014, the newest version of Festival is 2.4. This version of festival and the voices included with this distribution are the highest quality so far. Because the voice synthesis engines change in this distribution, it is only compatible with the voices included in its download package. Similarly, these new voices are not compatible with older versions of festival. Version 2.4 has the highest quality of voices, but at a significant speed cost. For example, the sentence "Pablo Ruiz y Picasso, also known as Pablo Picasso, was a Spanish painter, sculptor, printmaker, ceramicist, stage designer, poet and playwright who spent most of his adult life in France." takes about 30 seconds to synthesize, while it only takes 7 seconds to synthesize in version 2.1. Instructions and recommendations for older releases and additional voices for these voices are located on the bottom of the README.
 
 ####Installing Festival 2.4
 1) Go to [http://www.festvox.org/packed/festival/2.4/] (http://www.festvox.org/packed/festival/2.4/) and download 
